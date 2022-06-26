@@ -1,7 +1,7 @@
 {
-  "name": "sunrodapi",
+  "name": "sunrod-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "The official SunRod project API.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,14 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/Sadyn-Project/SunRodAPI.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "sunrod"
+  ],
+  "author": "Sadyn Project",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Sadyn-Project/SunRodAPI/issues"
   },
   "homepage": "https://github.com/Sadyn-Project/SunRodAPI#readme",
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "utils": "^0.2.2"
   }
 }
