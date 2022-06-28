@@ -21,6 +21,6 @@
   "homepage": "https://github.com/Sadyn-Project/SunRodAPI#readme",
   "dependencies": {
     "axios": "^0.27.2",
-    "utils": "^0.2.2"
+    "utils": "^0.3.1"
   }
 }
