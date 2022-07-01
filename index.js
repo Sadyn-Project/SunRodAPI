@@ -61,7 +61,7 @@ class SunRodAPI {
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
 			const { data } = await axios.post('http://185.196.21.208:5001/', { type: 'add', token: this.token, user, coins });
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-			return { data: { user, coins }, result: data.status };
+			return { data: { user, coins: data.coins }, result: data.status };
 		};
 		this.remove = async ({ user, coins, bypass }) => {
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
@@ -69,7 +69,7 @@ class SunRodAPI {
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
 			const { data } = await axios.post('http://185.196.21.208:5001/', { type: 'remove', token: this.token, user, coins });
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-			return { data: { user, coins }, result: data.status };
+			return { data: { user, coins: data.coins }, result: data.status };
 		};
 		this.transfer = async ({ user1, user2, coins, bypass }) => {
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
