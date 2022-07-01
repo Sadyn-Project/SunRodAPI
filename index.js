@@ -17,15 +17,14 @@
 */
 
 const axios = require('axios');
-const { promisify } = require('utils');
+// const { promisify } = require('utils');
 
 const statusCodes = [
 	{ status: 0, result: 'success' },
 	{ status: 1, result: 'invalid token' },
 	{ status: 2, result: 'non-existing type' },
-	{ status: 3, result: 'user not found' },
-	{ status: 4, result: 'invalid input' },
-	{ status: 5, result: 'user has not enough coins' }
+	{ status: 3, result: 'invalid input' },
+	{ status: 4, result: 'user has not enough coins' }
 ];
 
 const getStatus = (statusCode) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
@@ -38,7 +37,7 @@ class SunRodAPI {
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			const { data } = await axios.post('http://185.196.21.208:5001/', { type: 'get', token: this.token, user });
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-			return { data: data.coins, result: data.status, result: data.status };
+			return { data: data.coins, result: data.status };
 		};
 		this.has = async ({ user, coins, bypass }) => {
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
