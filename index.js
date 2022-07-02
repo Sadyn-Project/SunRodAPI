@@ -32,14 +32,18 @@ const getStatus = (statusCode) => statusCodes.find(code => code.status == status
 class SunRodAPI {
 	constructor() {
 		this.connect = (token) => this.token = token;
-		this.get = async ({ user, bypass }) => {
+		this.get = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			const { data } = await axios.post('http://185.196.21.208:5001/', { type: 'get', token: this.token, user });
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 			return { data: data.coins, result: data.status };
 		};
-		this.has = async ({ user, coins, bypass }) => {
+		this.has = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user, coins, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
@@ -47,7 +51,9 @@ class SunRodAPI {
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 			return { data: coins >= data.coins, result: data.status };
 		};
-		this.set = async ({ user, coins, bypass }) => {
+		this.set = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user, coins, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
@@ -55,7 +61,9 @@ class SunRodAPI {
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 			return { data: { user, coins }, result: data.status };
 		};
-		this.add = async ({ user, coins, bypass }) => {
+		this.add = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user, coins, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
@@ -63,7 +71,9 @@ class SunRodAPI {
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 			return { data: { user, coins: data.coins }, result: data.status };
 		};
-		this.remove = async ({ user, coins, bypass }) => {
+		this.remove = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user, coins, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user !== 'string') throw new TypeError('User id must be a string.');
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
@@ -71,7 +81,9 @@ class SunRodAPI {
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 			return { data: { user, coins: data.coins }, result: data.status };
 		};
-		this.transfer = async ({ user1, user2, coins, bypass }) => {
+		this.transfer = async (input) => {
+			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
+			const { user1, user2, coins, bypass } = input;
 			if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
 			if (typeof user1 !== 'string' || typeof user2 !== 'string') throw new TypeError('User id must be a string.');
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
