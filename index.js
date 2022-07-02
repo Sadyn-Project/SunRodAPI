@@ -49,7 +49,7 @@ class SunRodAPI {
 			if (typeof coins !== 'number') throw new TypeError('Coins must be a number.');
 			const { data } = await axios.post('http://185.196.21.208:5001/', { type: 'get', token: this.token, user });
 			if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-			return { data: coins >= data.coins, result: data.status };
+			return { data: coins <= data.coins, result: data.status };
 		};
 		this.set = async (input) => {
 			if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
