@@ -9,10 +9,10 @@
 |                                                                   |
 +-------------------------------------------------------------------+
 
-             +----------------------------------------------+
- ENGLISH --> |      DO NOT COPY ANY CODE FROM THIS API!     |
-             |   NON COPIARE NESSUN CODICE DA QUESTA API!   | <-- ITALIAN
-             +----------------------------------------------+
+             +--------------------------------------------------+
+ ENGLISH --> |      AVOID TO COPY ANY CODE FROM THIS API!       |
+             |   EVITA DI COPIARE ALCUN CODICE DA QUESTA API!   | <-- ITALIAN
+             +--------------------------------------------------+
 
 */
 

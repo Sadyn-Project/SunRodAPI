@@ -1,17 +1,19 @@
 {
   "name": "sunrod-api",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "The official SunRod Project API.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sadyn-Project/SunRodAPI.git"
   },
   "keywords": [
-    "sunrod"
+    "sunrod",
+    "api",
+    "discord",
+    "economy",
+    "credits",
+    "coins"
   ],
   "author": "Sadyn Project",
   "license": "ISC",
