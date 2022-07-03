@@ -1,7 +1,7 @@
 {
   "name": "sunrod-api",
-  "version": "1.0.6",
-  "description": "The official SunRod project API.",
+  "version": "1.0.7",
+  "description": "The official SunRod Project API.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/Sadyn-Project/SunRodAPI#readme",
   "dependencies": {
-    "axios": "^0.27.2",
-    "utils": "^0.3.1"
+    "axios": "^0.27.2"
   }
 }
