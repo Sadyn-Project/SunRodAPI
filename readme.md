@@ -7,7 +7,7 @@
 > The special feature of it is that the system will be global and credits will be shared from one bot to one other.
 
 
-## Installation
+# Installation
 
 **Install the package with NPM:**
 
@@ -15,11 +15,11 @@
 npm install sunrod-api@latest
 ```
 
-## Documentation
+# Documentation
 
 > *Documentation is still being prepared, and the API is not fully functinal yet. Wait some days or weeks (or follow our announcements on [Discord](https://discord.gg/PBrPeuACnU/)) to let the stable version to come out.*
 
-### Constructor
+## Constructor
 
 To log in to SunRod API you must before create a session:
 
@@ -35,9 +35,9 @@ var SunRodAPI = new SunRodBuilder(token); // Start a session
 > client.sunrod = new SunRodBuilder(token);
 > ```
 >
-> **Also, the `token` variable in the constructor parameters must be your session token. If you're partecipating to the progect, you will be given a unique token to you.**
+> **Also, the `token` variable in the constructor parameters must be your session token. If you're partecipating to the project, you will be given a unique token.**
 
-### Methods
+## Methods
 
 > Methods in __SunRod API__ are used to manage user coins, but a valid token must be given to execute any action!
 >
@@ -45,7 +45,7 @@ var SunRodAPI = new SunRodBuilder(token); // Start a session
 >
 > *Status codes are right after the Methods category in this documentation.*
 
-#### SunRodAPI#get
+### SunRodAPI#__get__
 
 The `get` method is used to receive how many coins does a user have.
 
@@ -61,7 +61,7 @@ This method (as all the other methods) should return an object, and inside the `
 
 > An additional variable is shown `result`, which gives you the status code of that action. 0 usually means "success", but if the result code is different an error has occurred and it should throw a TypeError.
 
-#### SunRodAPI#has
+### SunRodAPI#__has__
 
 The `has` method is used to receive a boolean, which tells you if the user has the coins you decide (or more), else it will return false.
 
@@ -77,7 +77,7 @@ await SunRodAPI.has({ user: 'id', coins: 0 }); // Should return { data: boolean,
 
 The boolean inside `data` will be true if the user coins will be equal or higher than the input, else it will return false.
 
-#### SunRodAPI#set
+### SunRodAPI#__set__
 
 The `set` method is used to set the coins of a user to a specific amount, not lower than 0.
 
@@ -93,7 +93,7 @@ await SunRodAPI.set({ user: 'id', coins: 0 }); // Should return { data: { user: 
 
 The method should return in the `data` variable user's data. *It should be the same data given in the input.*
 
-#### SunRodAPI#add
+### SunRodAPI#__add__
 
 The `add` method can be used to add a specific amount of coins to a user.
 
@@ -109,7 +109,7 @@ await SunRodAPI.add({ user: 'id', coins: 0 }); // Should return { data: { user: 
 
 It is really similar to the `set` method as it gives the same output and asks for the same input, but its functionality is different.
 
-#### SunRodAPI#remove
+### SunRodAPI#__remove__
 
 The `remove` method will remove a specific amount of coins to a user.
 
@@ -125,7 +125,7 @@ await SunRodAPI.remove({ user: 'id', coins: 0 }); // Should return { data: { use
 
 This method is structured as the same as other 2 methods: `set` and `add`. That's because its function is similar, but instead of adding or setting coins, it subtracts them. In fact, in the `data` variable you will find user's data.
 
-#### SunRodAPI#transfer
+### SunRodAPI#__transfer__
 
 The `transfer` method can be used to move some coins from a user to another.
 
@@ -143,7 +143,7 @@ await SunRodAPI.transfer({ user1: 'id', user2: 'id', coins: 0 }); // Should retu
 
 This method returns in `data` both of the users in an array (user1 and user2), with how many coins they have.
 
-### Status Codes
+## Status Codes
 
 > Each status code means something, and is given in the object returned from any method, as the `result` variable.
 
@@ -163,8 +163,8 @@ This method returns in `data` both of the users in an array (user1 and user2), w
 `4` Given user has not enough coins. *It may appear when you try to remove or transfer coins from a user, but he doesn't have enough.*
 
 
-## Participate to SunRod!
+# Participate to __SunRod__!
 
-> Participate just by asking in our official Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)
->
-> *Else just ask in DMs to __GabrieleAGenius#0001__*
+Participate just by asking in our official Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)
+
+> Else just ask in DMs to __GabrieleAGenius#0001__
