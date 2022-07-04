@@ -28,7 +28,7 @@ npm install sunrod-api@latest
 
 > Documentation is still being prepared, and the API is not ready yet. Wait some days/weeks (or follow our announcements on [Discord](https://discord.gg/PBrPeuACnU/)) for the stable version to come out.  
 
-## Constructor {#construtctor}
+## Constructor
 
 To login with SunRod API you must before create a session:  
 
@@ -44,7 +44,7 @@ var SunRodAPI =  new  SunRodBuilder(token); // Start a session
 > ```
 > **The `token` variable inside the parameters. If you're partecipating to the project, you will be given a unique token.**  
 
-## Methods {#methods}
+## Methods
 
 > Every method parameter is an object, and its content will be the required variables for that specific method. You can also add `bypass: true` to do not get any TypeError if an action would not execute. Instead, you would receive a status code which would be relevant to a specific error.  
 > *Status codes are right after the Methods category in this documentation.*
