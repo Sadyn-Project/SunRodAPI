@@ -33,8 +33,8 @@ class SunRodAPI {
 		if (!token) throw new TypeError('Token is missing.');
 		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then(({ data }) => {
 			if (data.status == 1) throw new TypeError('SunRod token is invalid.');
-			this.token = token;
 		});
+		this.token = token;
 	}
 	get = async (input) => {
 		if (typeof input !== 'object') throw new TypeError('Input must be an object. Follow docs for more details.');
