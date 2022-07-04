@@ -20,9 +20,9 @@ npm install sunrod-api@latest
 
 # Token
 
-> A token is required for **SunRod API** to work, and you can have it just by joining the SunRod Project  
+> A token is required for **SunRod API** to work, and you can have it just by [joining](#participate-to-sunrod) the SunRod Project  
 
-**SunRod Tokens** are used to login to the sistem. They are 50-characters long strings, and every bot which participates to SunRod.  
+**SunRod Tokens** are used to login to the sistem. They are 50-characters long strings, and every bot which [participates to SunRod](#participate-to-sunrod).  
 
 # Documentation
 
@@ -42,12 +42,21 @@ var SunRodAPI =  new  SunRodBuilder(token); // Start a session
 > ```js
 > client.sunrod  =  new  SunRodBuilder(token);
 > ```
-> **The `token` variable inside the parameters. If you're partecipating to the project, you will be given a unique token.**  
+> **The `token` variable inside the parameters. If you're [partecipating](#participate-to-sunrod) to the project, you will be given a unique [token](#token).**  
 
 ## Methods
 
 > Every method parameter is an object, and its content will be the required variables for that specific method. You can also add `bypass: true` to do not get any TypeError if an action would not execute. Instead, you would receive a status code which would be relevant to a specific error.  
-> *Status codes are right after the Methods category in this documentation.*
+> *[Status Codes](#status-codes) are right after the Methods category in this documentation.*
+
+### Index
+
+- [SunRodAPI#*get*](#sunrodapiget)
+- [SunRodAPI#*has*](#sunrodapihas)
+- [SunRodAPI#*set*](#sunrodapiset)
+- [SunRodAPI#*add*](#sunrodapiadd)
+- [SunRodAPI#*remove*](#sunrodapiremove)
+- [SunRodAPI#*transfer*](#sunrodapitransfer)
 
 ### SunRodAPI#*get*
 
