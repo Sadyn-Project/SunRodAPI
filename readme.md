@@ -1,6 +1,6 @@
 # SunRod API
 
-__Join our discord server to have more information about updates, receive support at anytime and explore other of our projects!__
+**Join our discord server to have more information about updates, receive support at anytime and explore other of our projects!**
 
 [![Discord](https://i.ibb.co/nstT7dj/ff41b628a47ef3141164bfedb04fb220.png)](https://discord.gg/PBrPeuACnU/)
 
@@ -8,7 +8,7 @@ __Join our discord server to have more information about updates, receive suppor
 > This can be seen as an economy system, that can be used from one or more discord bots (who obviously ask for access) that can be used to buy premium features of a bot, or used to pay other users for services.  
 > The special feature of it is that the system will be global and credits will be shared from one bot to one other.
 
-# Installation {#installation}
+# Installation
 
 **Install the package with NPM:**
 
@@ -18,15 +18,15 @@ npm install sunrod-api@latest
 
 > *Always pay attention to new updates, as some functions may get deprecated and it may not work anymore for older versions.*  
 
-# Token {#token}
+# Token
 
-> A token is required for **SunRod API** to work, and you can have it just by [joining](#participate) the SunRod Project  
+> A token is required for **SunRod API** to work, and you can have it just by joining the SunRod Project  
 
-**SunRod Tokens** are used to login to the sistem. They are 50-characters long strings, and every bot which [participates to SunRod](#participate) .  
+**SunRod Tokens** are used to login to the sistem. They are 50-characters long strings, and every bot which participates to SunRod.  
 
-# Documentation {#documentation}
+# Documentation
 
-> Documentation is still being prepared, and the API is not ready yet. Wait some days/weeks  (or follow our announcements on [Discord](https://discord.gg/PBrPeuACnU/)) for the stable version to come out.  
+> Documentation is still being prepared, and the API is not ready yet. Wait some days/weeks (or follow our announcements on [Discord](https://discord.gg/PBrPeuACnU/)) for the stable version to come out.  
 
 ## Constructor {#construtctor}
 
@@ -42,12 +42,12 @@ var SunRodAPI =  new  SunRodBuilder(token); // Start a session
 > ```js
 > client.sunrod  =  new  SunRodBuilder(token);
 > ```
-> **The `token` variable inside the parameters. If you're [partecipating](#participate) to the project, you will be given a unique [token](#token).**  
+> **The `token` variable inside the parameters. If you're partecipating to the project, you will be given a unique token.**  
 
 ## Methods {#methods}
 
 > Every method parameter is an object, and its content will be the required variables for that specific method. You can also add `bypass: true` to do not get any TypeError if an action would not execute. Instead, you would receive a status code which would be relevant to a specific error.  
-> *[Status codes](#status-codes) are right after the Methods category in this documentation.*
+> *Status codes are right after the Methods category in this documentation.*
 
 ### SunRodAPI#*get*
 
@@ -134,7 +134,7 @@ await SunRodAPI.transfer({ user1: 'id', user2: 'id', coins: 0 }); // Should retu
 
 This method returns in `data` both of the users in an array (user1 and user2), with how many coins they have.  
 
-## Status Codes {#status-codes}
+## Status Codes
 
 > Each status code means something, and is given in the object returned from any method, as the `result` variable.
 
@@ -146,7 +146,7 @@ This method returns in `data` both of the users in an array (user1 and user2), w
 | `3` | An invalid input was given. *It may be a wrong user id, or you passed a string in the coins variable instead of an integer.* |
 | `4` | Given user has not enough coins. *It may appear when you try to remove or transfer coins from a user, but he doesn't have enough.* |
 
-# Participate to __SunRod__! {#participate}
+# Participate to __SunRod__!
 
 Participate just by asking in our official Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)
 
