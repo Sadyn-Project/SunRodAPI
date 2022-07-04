@@ -42,7 +42,7 @@ var SunRodAPI =  new  SunRodBuilder(token); // Start a session
 > ```js
 > client.sunrod  =  new  SunRodBuilder(token);
 > ```
-> **The `token` variable inside the parameters. If you're [partecipating](#participate-to-sunrod) to the project, you will be given a unique [token](#token).**  
+> **The `token` variable inside the parameters must be your [SunRod Token](#token). If you're [partecipating](#participate-to-sunrod) to the project, you will be given a unique token.**  
 
 ## Methods
 
