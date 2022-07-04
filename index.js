@@ -29,7 +29,7 @@ const statusCodes = [
 const getStatus = (statusCode) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
 
 class SunRodAPI {
-	constructor(token) {
+	async constructor(token) {
 		if (!token) throw new TypeError('Token is missing.');
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'login', token: this.token });
 		if (data.status == 1) throw new TypeError('SunRod token is invalid.');
