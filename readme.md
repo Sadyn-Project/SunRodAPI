@@ -13,7 +13,7 @@
 **Install the package with NPM:**
 
 ```console
-npm install sunrod-api@latest
+npm install sunrod-api@stable
 ```
 
 > *Always pay attention to new updates, as some functions may get deprecated and it may not work anymore for older versions.*  

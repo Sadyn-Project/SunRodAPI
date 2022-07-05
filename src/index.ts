@@ -16,7 +16,7 @@
 
 */
 
-import * as axios from 'axios';
+import axios from 'axios';
 
 const statusCodes = [
 	{ status: 0, result: 'success' },
@@ -26,18 +26,18 @@ const statusCodes = [
 	{ status: 4, result: 'user has not enough coins' }
 ];
 
-const getStatus = (statusCode) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
-
-const 
+const getStatus = (statusCode: number) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
 
 class SunRodAPI {
+	token: string;
+
 	/**
 	 * @constructor
 	 * @param token Must be inserted to log in
 	*/
 	constructor(token: string) {
 		if (!token) throw new TypeError('Token is missing.');
-		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then(({ data }) => {
+		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then(({ data: any }) => {
 			if (data.status == 1) throw new TypeError('SunRod token is invalid.');
 		});
 		this.token = token;
