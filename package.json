@@ -1,11 +1,15 @@
 {
   "name": "sunrod-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The official SunRod Project API.",
-  "main": "index.js",
+  "types": "types/index.d.ts",
+  "main": "build/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sadyn-Project/SunRodAPI.git"
+  },
+  "scripts": {
+    "build": "tsc"
   },
   "keywords": [
     "sunrod",
@@ -22,6 +26,7 @@
   },
   "homepage": "https://github.com/Sadyn-Project/SunRodAPI#readme",
   "dependencies": {
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "typescript": "^4.7.4"
   }
 }
