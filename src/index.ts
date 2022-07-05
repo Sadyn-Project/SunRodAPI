@@ -37,8 +37,8 @@ class SunRodAPI {
 	*/
 	constructor(token: string) {
 		if (!token) throw new TypeError('Token is missing.');
-		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then(({ data: any }) => {
-			if (data.status == 1) throw new TypeError('SunRod token is invalid.');
+		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then(output => {
+			if (output.data.status == 1) throw new TypeError('SunRod token is invalid.');
 		});
 		this.token = token;
 	}
