@@ -1,53 +1,76 @@
 # SunRod API
 
-**Join our discord server to have more information about updates, receive support at anytime and explore other of our projects!**
+**Join our Discord server to receive announcements about new updates, and receive support at anytime you need!**  
 
 [![Discord](https://i.ibb.co/nstT7dj/ff41b628a47ef3141164bfedb04fb220.png)](https://discord.gg/PBrPeuACnU/)
 
-> SunRod is a project based on a global discord-based credits system.  
-> This can be seen as an economy system, that can be used from one or more discord bots (who obviously ask for access) that can be used to buy premium features of a bot, or used to pay other users for services.  
-> The special feature of it is that the system will be global and credits will be shared from one bot to one other.
+SunRod is a project started by **Sadyn Development**, and our aim is to create an API available to Discord Bot developers that allows to use a global economy system as you wish.  
+
+This will not be as simple as the other economy systems, because to gain coins users will need to seriously work, and not only running a command.  
+
+In fact we want to replace paid subscriptions or premium features with our economy. *For example users can buy a premium command for a week just with 50 or 80 coins.*  
+
+Prices and features will be your decision, you can choose what to do with this system but you will need to ask for an authorization from us. *This is because we will then discuss together about prices and rewards.*
 
 # Installation
 
-**Install the package with NPM:**
+**Install the package with NPM:**  
 
 ```console
 npm install sunrod-api@stable
 ```
 
-> *Always pay attention to new updates, as some functions may get deprecated and it may not work anymore for older versions.*  
+**Install the package with YARN:**  
+
+```console
+yarn add sunrod-api@stable
+```
+
+> *Installing the `stable` version is more reccommended, as new versions may not work as you wish.*  
 
 # Token
 
-> A token is required for **SunRod API** to work, and you can have it just by [joining](#participate-to-sunrod) the SunRod Project  
+> A token is required for the **SunRod API** to work, and you can receive one just by [joining](#participate-to-sunrod) the SunRod Project.  
 
-**SunRod Tokens** are used to login to the sistem. They are 50-characters long strings, and every bot which [participates to SunRod](#participate-to-sunrod).  
+**SunRod Tokens** are used to login to the API. They are 50-characters long strings, and every bot which [participates to SunRod](#participate-to-sunrod) has its own token.  
+
+Tokens are useful for us to follow how you interact with the API and to keep the system secure from people who may want to ruin our project.  
+
+**ATTENTION:** We do **not** receive any private information about you and your bot from this API and we do **not** share how you interact with the API.  
+Also, SunRod token **is different** from your discord bot token and should not be shared with us or anybody else.  
+
+Look up our [Security Section](#security) for more info.
 
 # Documentation
 
-> Documentation is still being prepared, and the API is not ready yet. Wait some days/weeks (or follow our announcements on [Discord](https://discord.gg/PBrPeuACnU/)) for the stable version to come out.  
+Welcome to our documentation! Here you can learn how the constructor and the methods work.
+
+> If you need any help or explanation, ask for support in our [Discord Server](https://discord.gg/PBrPeuACnU/)!
 
 ## Constructor
 
-To login with SunRod API you must before create a session:  
+To log into the API you must insert your token:  
 
 ```js
-var SunRodBuilder =  require('sunrod-api'); // Require the library
+var SunRodBuilder =  require('sunrod-api'); // Requires the library
 
-var SunRodAPI =  new  SunRodBuilder(token); // Start a session
+var SunRodAPI =  new  SunRodBuilder(token); // Logs into the API
 ```
 
+**The `token` parameter must be your [SunRod Token](#token).**  
+
 > For ease, in your discord bot you will probably set `SunRodAPI` inside the `client` variable:  
-> ```js
-> client.sunrod  =  new  SunRodBuilder(token);
-> ```
-> **The `token` variable inside the parameters must be your [SunRod Token](#token). If you're [partecipating](#participate-to-sunrod) to the project, you will be given a unique token.**  
+```js
+client.sunrod  =  new  SunRodBuilder(token);
+```
 
 ## Methods
 
-> Every method parameter is an object, and its content will be the required variables for that specific method. You can also add `bypass: true` to do not get any TypeError if an action would not execute. Instead, you would receive a status code which would be relevant to a specific error.  
-> *[Status Codes](#status-codes) are right after the Methods category in this documentation.*
+> Every method parameter is expected to be an object, with inside of it the required values.
+>
+> You can also add `bypass: true` as a property inside the object to do not get any TypeError if an action would not execute. Otherwise, your bot would crash and your command would stop executing.
+>
+> *You can have more information in the [Status Codes](#status-codes) category.*  
 
 ### Index
 
@@ -60,22 +83,23 @@ var SunRodAPI =  new  SunRodBuilder(token); // Start a session
 
 ### SunRodAPI#*get*
 
-The `get` method is used to receive how many coins does a user have.  
+The `get` method returns the amount of coins the user has.  
 
 > Input:  
-> `user: string`    
+> `user: string`  
 
 ```js
 await SunRodAPI.get({ user: id }); // Should return { data: number, result: 0 }
 ```
 
-This method (as all the other methods) should return an object, and inside the `data` variable of it there will be how many coins does the user have.  
+All methods return an object, and inside the `data` property there will be the result you need (in this case the user coins amount).  
 
-> An additional variable is shown `result`, which gives you the status code of that action. 0 usually means "success", but if the result code is different an error has occurred and it should throw a TypeError.  
+> `result` is another property available in the returned object, which gives you the status code of that method. 0 usually means "success", but if the result code is different it means that an error has occurred and a TypeError will appear.  
 
 ### SunRodAPI#*has*
 
-The `has` method is used to receive a boolean, which tells you if the user has the coins you decide (or more), else it will return false.  
+The `has` method returns a boolean: true if the user amount of coins is higher of the one you give, false if it is lower.  
+
 > Input:  
 > `user: string`  
 > `coins: number`  
@@ -84,11 +108,11 @@ The `has` method is used to receive a boolean, which tells you if the user has t
 await SunRodAPI.has({ user: 'id', coins: 0 }); // Should return { data: boolean, result: 0 }
 ```
 
-The boolean inside `data` will be true if the user coins will be equal or higher than the input, else it will return false.  
+Inside the `data` property you will find the returned boolean.  
 
 ### SunRodAPI#*set*
 
-The `set` method is used to set the coins of a user to a specific amount, not lower than 0.  
+The `set` method sets to the user a specific amount of coins, and returns the user data.  
 
 > Input:  
 > `user: string`  
@@ -98,11 +122,11 @@ The `set` method is used to set the coins of a user to a specific amount, not lo
 await SunRodAPI.set({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 }
 ```
 
-The method should return in the `data` variable user's data. *It should be the same data given in the input.*  
+Inside the `data` property you can find user data, with how many coins does he have in total and his id.  
 
 ### SunRodAPI#*add*
 
-The `add` method can be used to add a specific amount of coins to a user.  
+The `add` method adds a specific amount of coins to a user and returns user data.  
 
 > Input:  
 > `user: string`  
@@ -112,11 +136,11 @@ The `add` method can be used to add a specific amount of coins to a user.
 await SunRodAPI.add({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
 ```
 
-It is really similar to the `set` method as it gives the same output and asks for the same input, but its functionality is different.  
+Structure is similar to the `set` method, although this sums to the current user balance and adds the given amount.  
 
 ### SunRodAPI#*remove*
 
-The `remove` method will remove a specific amount of coins to a user.  
+The `remove` method removes a specific amount of coins to a user and returns user data.  
 
 > Input:  
 > `user: string`  
@@ -126,11 +150,13 @@ The `remove` method will remove a specific amount of coins to a user.
 await SunRodAPI.remove({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
 ```
 
-This method is structured as the same as other 2 methods: `set` and `add`. That's because its function is similar, but instead of adding or setting coins, it subtracts them. In fact, in the `data` variable you will find user's data.  
+This method has the same structure as the `set` and the `add` method, but this subtracts coins from the user.  
+
+**ATTENTION:** The user may not have enough coins in some situations, and an error would appear. View [Status Codes](#status-codes) for more information.  
 
 ### SunRodAPI#*transfer*
 
-The `transfer` method can be used to move some coins from a user to another.  
+The `transfer` method transfers an amount of coins from a user to another and returns users data.  
 
 > Input:  
 > `user1: string`  
@@ -141,22 +167,35 @@ The `transfer` method can be used to move some coins from a user to another.
 await SunRodAPI.transfer({ user1: 'id', user2: 'id', coins: 0 }); // Should return { data: [ { user: string, coins: number }, { user: string, coins: number } ], result: 0 }
 ```
 
-This method returns in `data` both of the users in an array (user1 and user2), with how many coins they have.  
+Inside the `data` property you can find an array containing bot users data.  
+
+**ATTENTION:** The user may not have enough coins in some situations, and an error would appear. View [Status Codes](#status-codes) for more information.  
 
 ## Status Codes
 
-> Each status code means something, and is given in the object returned from any method, as the `result` variable.
+> Each status code means something, and is given in the object returned from any method, as the `result` variable.  
 
 | Code | Meaning |
 | :-----: | ----- |
-| `0` | The method was succesful. |
-| `1` | The given token is invalid. |
+| `0` | The method was successful. |
+| `1` | The token you are trying to use is not valid. |
 | `2` |  An invalid method was given. *This usually returns when somebody changes the API or creates one by his own.* |
 | `3` | An invalid input was given. *It may be a wrong user id, or you passed a string in the coins variable instead of an integer.* |
 | `4` | Given user has not enough coins. *It may appear when you try to remove or transfer coins from a user, but he doesn't have enough.* |
 
+When the returned status code is not 0, your application (usually your bot) would crash ans give a TypeError on your console.  
+To avoid this add `bypass: true` as a property inside the object you insert as the method parameter, and inside the returned object you will find a `result` property which will be the status code that relates to the problem.  
+
+# Security
+
+We grant security and privacy with our API, it does not require any private information like your bot token or personal data.  
+
+We suggest to never download and use any alternative API to SunRod, as somebody may be trying to hack you or take your personal information. Just install our official APIs to interact with SunRod. *If you find an API you prefer to use, ask us if it is safe so that we will examinate it and check if there can be any problem.*  
+
+We use tokens as a login system but also to track your interactions with the API for security reason. The reason of this is that if somebody manages to have access to your token and tries to ruin our database, we can notice it and change or disable your token immediately. *In case something like this happens, we will alert you.*  
+
 # Participate to __SunRod__!
 
-Participate just by asking in our official Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)
+Ask to participate to **SunRod Project** in our Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)  
 
-> Else just ask in DMs to **GabrieleAGenius#0001**
+> Else just dm to **GabrieleAGenius#0001** on discord.  
