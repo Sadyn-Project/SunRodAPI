@@ -80,6 +80,7 @@ client.sunrod  =  new  SunRodBuilder(token);
 - [SunRodAPI#*add*](#sunrodapiadd)
 - [SunRodAPI#*remove*](#sunrodapiremove)
 - [SunRodAPI#*transfer*](#sunrodapitransfer)
+<!-- - [SunRodAPI#*top*](#sunrodapitop) -->
 
 ### SunRodAPI#*get*
 
@@ -171,6 +172,36 @@ Inside the `data` property you can find an array containing bot users data.
 
 **ATTENTION:** The user may not have enough coins in some situations, and an error would appear. View [Status Codes](#status-codes) for more information.  
 
+### SunRodAPI#*top*
+
+The `top` method returns a leaderboard of the users who have the higher amount of coins.  
+
+> Input:  
+> `amount: number`  
+
+```js
+await SunRodAPI.top({ amount: 0 }); // Should return { data: { user: string, coins: number }[], result: 0 }
+```
+
+Inside the `data` property you can find an array containing the users with most coins fethed in the database.  
+
+**ATTENTION:** The amount of users may be higher than the fetched users in our database, and an error would appear. View [Status Codes](#status-codes) for more information.  
+
+### SunRodAPI#*bottom*
+
+The `bottom` method returns a leaderboard of the users with the lower amount of coins.  
+
+> Input:  
+> `amount: number`  
+
+```js
+await SunRodAPI.top({ amount: 0 }); // Should return { data: { user: string, coins: number }[], result: 0 }
+```
+
+Inside the `data` property you can find an array containing the users with most coins fethed in the database.  
+
+**ATTENTION:** The amount of users may be higher than the fetched users in our database, and an error would appear. View [Status Codes](#status-codes) for more information.  
+
 ## Status Codes
 
 > Each status code means something, and is given in the object returned from any method, as the `result` variable.  
@@ -182,6 +213,9 @@ Inside the `data` property you can find an array containing bot users data.
 | `2` |  An invalid method was given. *This usually returns when somebody changes the API or creates one by his own.* |
 | `3` | An invalid input was given. *It may be a wrong user id, or you passed a string in the coins variable instead of an integer.* |
 | `4` | Given user has not enough coins. *It may appear when you try to remove or transfer coins from a user, but he doesn't have enough.* |
+| `5` | An invalid amount of users was given. *Usually returned by `SunRodAPI#top()`.* |
+| `6` | Given amount of users was higher than fetched users. *Usually returned by `SunRodAPI#top()`.* |
+| `7` | The function you're trying to use is temporarily not available. *Usually because of important bugs to fix.* |
 
 When the returned status code is not 0, your application (usually your bot) would crash ans give a TypeError on your console.  
 To avoid this add `bypass: true` as a property inside the object you insert as the method parameter, and inside the returned object you will find a `result` property which will be the status code that relates to the problem.  

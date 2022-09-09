@@ -23,7 +23,10 @@ const statusCodes = [
 	{ status: 1, result: 'invalid token' },
 	{ status: 2, result: 'non-existing type' },
 	{ status: 3, result: 'invalid input' },
-	{ status: 4, result: 'user has not enough coins' }
+	{ status: 4, result: 'user has not enough coins' },
+	{ status: 5, result: 'invalid user amount' },
+	{ status: 6, result: 'too many users' },
+	{ status: 7, result: 'function not available' },
 ];
 
 const getStatus = (statusCode: number) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
@@ -61,7 +64,8 @@ class SunRodAPI {
 		const { user, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'get', token: this.token, user });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: data.coins, result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: data.coins, result: data.status };
 	}
 	/**
 	 * @param input Must be an object
@@ -80,7 +84,8 @@ class SunRodAPI {
 		const { user, coins, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'get', token: this.token, user });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: coins <= data.coins, result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: coins <= data.coins, result: data.status };
 	}
 	/**
 	 * @param input Must be an object
@@ -99,7 +104,8 @@ class SunRodAPI {
 		const { user, coins, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'set', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: { user, coins }, result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: { user, coins }, result: data.status };
 	}
 	/**
 	 * @param input Must be an object
@@ -118,7 +124,8 @@ class SunRodAPI {
 		const { user, coins, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'add', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: { user, coins: data.coins }, result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: { user, coins: data.coins }, result: data.status };
 	}
 	/**
 	 * @param input Must be an object
@@ -137,7 +144,8 @@ class SunRodAPI {
 		const { user, coins, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'remove', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: { user, coins: data.coins }, result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: { user, coins: data.coins }, result: data.status };
 	}
 	/**
 	 * @param input Must be an object
@@ -159,7 +167,42 @@ class SunRodAPI {
 		const { user1, user2, coins, bypass } = input;
 		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'transfer', token: this.token, user1, user2, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		return { data: [ { user: user1, coins: data.coins[0] }, { user: user2, coins: data.coins[1] } ], result: data.status };
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: [ { user: user1, coins: data.coins[0] }, { user: user2, coins: data.coins[1] } ], result: data.status };
+	}
+	/**
+	 * @param input Must be an object
+	 * @param input.amount Insert an amount of users to list
+	 * @param input.bypass Decide to bypass error crashing or not
+	*/
+	async top(input: { amount: number, bypass?: boolean }) {
+		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+		checkType([
+			{ name: 'input', type: 'object', value: input },
+			{ name: 'amount', type: 'number', value: input?.amount },
+		]);
+		const { amount, bypass } = input;
+		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'top', token: this.token, amount });
+		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: data.users, result: data.status };
+	}
+	/**
+	 * @param input Must be an object
+	 * @param input.amount Insert an amount of users to list
+	 * @param input.bypass Decide to bypass error crashing or not
+	*/
+	async bottom(input: { amount: number, bypass?: boolean }) {
+		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+		checkType([
+			{ name: 'input', type: 'object', value: input },
+			{ name: 'amount', type: 'number', value: input?.amount },
+		]);
+		const { amount, bypass } = input;
+		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'bottom', token: this.token, amount });
+		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
+		else if (data.status !== 0 && bypass) return { result: data.status };
+		else return { data: data.users, result: data.status };
 	}
 }
 
