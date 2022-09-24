@@ -44,7 +44,7 @@ class SunRodAPI {
 	*/
 	constructor(token: string) {
 		if (!token) throw new TypeError('Token is missing.');
-		axios.post('http://sadyn.it:5001/', { type: 'login', token }).then((output: any) => {
+		axios.post('http://unproxied.sadyn.it:5001/', { type: 'login', token }).then((output: any) => {
 			if (output.data.status == 1) throw new TypeError('SunRod token is invalid.');
 		});
 		this.token = token;
@@ -62,7 +62,7 @@ class SunRodAPI {
 			{ name: 'user', type: 'string', value: input?.user },
 		]);
 		const { user, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'get', token: this.token, user });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'get', token: this.token, user });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: data.coins, result: data.status };
@@ -82,7 +82,7 @@ class SunRodAPI {
 			{ name: 'coins', type: 'number', value: input?.coins },
 		]);
 		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'get', token: this.token, user });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'get', token: this.token, user });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: coins <= data.coins, result: data.status };
@@ -102,7 +102,7 @@ class SunRodAPI {
 			{ name: 'coins', type: 'number', value: input?.coins },
 		]);
 		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'set', token: this.token, user, coins });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'set', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: { user, coins }, result: data.status };
@@ -122,7 +122,7 @@ class SunRodAPI {
 			{ name: 'coins', type: 'number', value: input?.coins },
 		]);
 		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'add', token: this.token, user, coins });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'add', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: { user, coins: data.coins }, result: data.status };
@@ -142,7 +142,7 @@ class SunRodAPI {
 			{ name: 'coins', type: 'number', value: input?.coins },
 		]);
 		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'remove', token: this.token, user, coins });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'remove', token: this.token, user, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: { user, coins: data.coins }, result: data.status };
@@ -165,7 +165,7 @@ class SunRodAPI {
 			{ name: 'coins', type: 'number', value: input?.coins },
 		]);
 		const { user1, user2, coins, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'transfer', token: this.token, user1, user2, coins });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'transfer', token: this.token, user1, user2, coins });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: [ { user: user1, coins: data.coins[0] }, { user: user2, coins: data.coins[1] } ], result: data.status };
@@ -182,7 +182,7 @@ class SunRodAPI {
 			{ name: 'amount', type: 'number', value: input?.amount },
 		]);
 		const { amount, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'top', token: this.token, amount });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'top', token: this.token, amount });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: data.users, result: data.status };
@@ -199,7 +199,7 @@ class SunRodAPI {
 			{ name: 'amount', type: 'number', value: input?.amount },
 		]);
 		const { amount, bypass } = input;
-		const { data } = await axios.post('http://sadyn.it:5001/', { type: 'bottom', token: this.token, amount });
+		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'bottom', token: this.token, amount });
 		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
 		else if (data.status !== 0 && bypass) return { result: data.status };
 		else return { data: data.users, result: data.status };

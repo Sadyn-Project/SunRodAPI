@@ -1,6 +1,6 @@
 {
   "name": "sunrod-api",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "The official SunRod Project API.",
   "types": "types/index.d.ts",
   "main": "build/index.js",

@@ -52,16 +52,16 @@ Welcome to our documentation! Here you can learn how the constructor and the met
 To log into the API you must insert your token:  
 
 ```js
-var SunRodBuilder =  require('sunrod-api'); // Requires the library
+var SunRodBuilder = require('sunrod-api'); // Requires the library
 
-var SunRodAPI =  new  SunRodBuilder(token); // Logs into the API
+var SunRodAPI = new SunRodBuilder(token); // Logs into the API
 ```
 
 **The `token` parameter must be your [SunRod Token](#token).**  
 
 > For ease, in your discord bot you will probably set `SunRodAPI` inside the `client` variable:  
 ```js
-client.sunrod  =  new  SunRodBuilder(token);
+client.sunrod = new SunRodBuilder(token);
 ```
 
 ## Methods
@@ -80,7 +80,8 @@ client.sunrod  =  new  SunRodBuilder(token);
 - [SunRodAPI#*add*](#sunrodapiadd)
 - [SunRodAPI#*remove*](#sunrodapiremove)
 - [SunRodAPI#*transfer*](#sunrodapitransfer)
-<!-- - [SunRodAPI#*top*](#sunrodapitop) -->
+- [SunRodAPI#*top*](#sunrodapitop)
+- [SunRodAPI#*bottom*](#sunrodapibottom)
 
 ### SunRodAPI#*get*
 
