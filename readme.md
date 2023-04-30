@@ -1,8 +1,7 @@
+[![Logo](https://sunrod.it/playground_assets/sunrod.svg)](https://sunrod.it)
 # SunRod API
 
 **Join our Discord server to receive announcements about new updates, and receive support at anytime you need!**  
-
-[![Discord](https://i.ibb.co/nstT7dj/ff41b628a47ef3141164bfedb04fb220.png)](https://discord.gg/PBrPeuACnU/)
 
 SunRod is a project started by **Sadyn Development**, and our aim is to create an API available to Discord Bot developers that allows to use a global economy system as you wish.  
 
@@ -17,27 +16,27 @@ Prices and features will be your decision, you can choose what to do with this s
 **Install the package with NPM:**  
 
 ```console
-npm install sunrod-api@stable
+npm install sunrod-api@latest
 ```
 
 **Install the package with YARN:**  
 
 ```console
-yarn add sunrod-api@stable
+yarn add sunrod-api@latest
 ```
 
-> *Installing the `stable` version is more reccommended, as new versions may not work as you wish.*  
+> *Installing the `latest` version is more reccommended, as `dev` versions may not work as you wish.*  
 
 # Token
 
-> A token is required for the **SunRod API** to work, and you can receive one just by [joining](#participate-to-sunrod) the SunRod Project.  
+> A token is required for **SunRod** to work, and you can receive one just by [joining](#participate-to-sunrod) the SunRod Project.  
 
-**SunRod Tokens** are used to login to the API. They are 50-characters long strings, and every bot which [participates to SunRod](#participate-to-sunrod) has its own token.  
+**SunRod Tokens** are used to login to the API. They are 30-characters long passwords, and each bot [participating to SunRod](#participate-to-sunrod) has its own token.  
 
-Tokens are useful for us to follow how you interact with the API and to keep the system secure from people who may want to ruin our project.  
+Tokens are useful for us to monitor how bots use the API, and to identify who is authorized to use it and who is not.  
 
-**ATTENTION:** We do **not** receive any private information about you and your bot from this API and we do **not** share how you interact with the API.  
-Also, SunRod token **is different** from your discord bot token and should not be shared with us or anybody else.  
+**ATTENTION:** We do **NOT** receive any private information about you and your bot from this API and we do **NOT** share how you interact with the API.  
+Also, a SunRod token **is different** from your discord bot token and should not be shared with us or anybody else.  
 
 Look up our [Security Section](#security) for more info.
 
@@ -52,27 +51,52 @@ Welcome to our documentation! Here you can learn how the constructor and the met
 To log into the API you must insert your token:  
 
 ```js
-var SunRodBuilder = require('sunrod-api'); // Requires the library
+const SunRod = require('sunrod-api'); // Requires the library
 
-var SunRodAPI = new SunRodBuilder(token); // Logs into the API
+const client = new SunRod(token); // Logs into the API
 ```
 
 **The `token` parameter must be your [SunRod Token](#token).**  
 
-> For ease, in your discord bot you will probably set `SunRodAPI` inside the `client` variable:  
+If you want to bypass every possible error that could generate over time, use this:  
+
 ```js
-client.sunrod = new SunRodBuilder(token);
+const client = new SunRod(token, { bypass: true });
+```
+
+**IMPORTANT: If the token is not authorized to SunRod, you'll get an error.**  
+
+> For ease, in your discord bot you would probably set `SunRod` inside the `client` variable:  
+```js
+client.sunrod = new SunRod(token);
+```
+
+## Classes
+
+### SunRod
+
+```js
+const SunRod = require('sunrod-api');
+```
+
+This contains complete access to the API. More info on [Methods](#methods).
+
+### User
+
+```js
+const { User } = require('sunrod-api');
+```
+
+This class contains all necessary info about a user.
+
+```js
+const myUser = new User('604790617138266149', 100) // id, coins
+
+console.log(myUser.id); // '604790617138266149'
+console.log(myUser.coins); // 100
 ```
 
 ## Methods
-
-> Every method parameter is expected to be an object, with inside of it the required values.
->
-> You can also add `bypass: true` as a property inside the object to do not get any TypeError if an action would not execute. Otherwise, your bot would crash and your command would stop executing.
->
-> *You can have more information in the [Status Codes](#status-codes) category.*  
-
-### Index
 
 - [SunRodAPI#*get*](#sunrodapiget)
 - [SunRodAPI#*has*](#sunrodapihas)
@@ -80,8 +104,6 @@ client.sunrod = new SunRodBuilder(token);
 - [SunRodAPI#*add*](#sunrodapiadd)
 - [SunRodAPI#*remove*](#sunrodapiremove)
 - [SunRodAPI#*transfer*](#sunrodapitransfer)
-- [SunRodAPI#*top*](#sunrodapitop)
-- [SunRodAPI#*bottom*](#sunrodapibottom)
 
 ### SunRodAPI#*get*
 
@@ -91,10 +113,10 @@ The `get` method returns the amount of coins the user has.
 > `user: string`  
 
 ```js
-await SunRodAPI.get({ user: id }); // Should return { data: number, result: 0 }
+await SunRodAPI.get(id); // Should return User
 ```
 
-All methods return an object, and inside the `data` property there will be the result you need (in this case the user coins amount).  
+All methods return a [User](#user), and inside the `data` property there will be the result you need (in this case the user coins amount).  
 
 > `result` is another property available in the returned object, which gives you the status code of that method. 0 usually means "success", but if the result code is different it means that an error has occurred and a TypeError will appear.  
 
@@ -170,38 +192,6 @@ await SunRodAPI.transfer({ user1: 'id', user2: 'id', coins: 0 }); // Should retu
 ```
 
 Inside the `data` property you can find an array containing bot users data.  
-
-**ATTENTION:** The user may not have enough coins in some situations, and an error would appear. View [Status Codes](#status-codes) for more information.  
-
-### SunRodAPI#*top*
-
-The `top` method returns a leaderboard of the users who have the higher amount of coins.  
-
-> Input:  
-> `amount: number`  
-
-```js
-await SunRodAPI.top({ amount: 0 }); // Should return { data: { user: string, coins: number }[], result: 0 }
-```
-
-Inside the `data` property you can find an array containing the users with most coins fethed in the database.  
-
-**ATTENTION:** The amount of users may be higher than the fetched users in our database, and an error would appear. View [Status Codes](#status-codes) for more information.  
-
-### SunRodAPI#*bottom*
-
-The `bottom` method returns a leaderboard of the users with the lower amount of coins.  
-
-> Input:  
-> `amount: number`  
-
-```js
-await SunRodAPI.top({ amount: 0 }); // Should return { data: { user: string, coins: number }[], result: 0 }
-```
-
-Inside the `data` property you can find an array containing the users with most coins fethed in the database.  
-
-**ATTENTION:** The amount of users may be higher than the fetched users in our database, and an error would appear. View [Status Codes](#status-codes) for more information.  
 
 ## Status Codes
 

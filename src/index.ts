@@ -16,194 +16,177 @@
 
 */
 
-import axios from 'axios';
+import endpoint from './endpoint';
+import checkType from './checkType';
+import checkError from './checkError';
 
-const statusCodes = [
-	{ status: 0, result: 'success' },
-	{ status: 1, result: 'invalid token' },
-	{ status: 2, result: 'non-existing type' },
-	{ status: 3, result: 'invalid input' },
-	{ status: 4, result: 'user has not enough coins' },
-	{ status: 5, result: 'invalid user amount' },
-	{ status: 6, result: 'too many users' },
-	{ status: 7, result: 'function not available' },
-];
+import User from './components/User';
 
-const getStatus = (statusCode: number) => statusCodes.find(code => code.status == statusCode)?.result || 'unknown';
-
-const checkType = (input: { name: string, type: string, value: any }[]) => {
-	for (const element of input) if (typeof element.value !== element.type) throw new TypeError(`"${element.name}" property was expected to be ${element.type == 'object' ? 'an' : 'a'} ${element.type}, but received ${typeof element.value == 'object' ? 'an' : 'a'} ${typeof element.value}. Follow documentation for more details.`);
-};
-
-class SunRodAPI {
-	token: string;
+/**
+ * The SunRod Client you need to interact with the API.
+ */
+class SunRod {
 
 	/**
+	 * The SunRod Token
+	 */
+	readonly token: string;
+
+	/**
+	 * If this is enabled, SunRod will not throw any error
+	 */
+	readonly bypass: boolean;
+
+	/**
+	 * Constructs the SunRod Client.
 	 * @constructor
-	 * @param token Must be inserted to log in
-	*/
-	constructor(token: string) {
+	 * @param token The SunRod Token you're using to connect to the API
+	 * @param options.bypass Whenever there's an error, it will not appear
+	 * @returns The constructed client linked to your token
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 */
+	constructor(token: string, options?: { bypass?: boolean }) {
 		if (!token) throw new TypeError('Token is missing.');
-		axios.post('http://unproxied.sadyn.it:5001/', { type: 'login', token }).then((output: any) => {
-			if (output.data.status == 1) throw new TypeError('SunRod token is invalid.');
-		});
 		this.token = token;
+		if (options.bypass !== undefined) this.bypass = options.bypass;
+		endpoint.get('verify', token).then((res) => {
+			if (!res) throw new Error('SunRod is currently unreachable. Check availability on https://status.sadyn.it');
+			if (!res.data.verify) throw new Error('Your SunRod token is invalid.');
+		});
 	}
+	
 	/**
-	 * @param input Must be an object
-	 * @param input.user Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async get(input: { user: string, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
-		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user', type: 'string', value: input?.user },
-		]);
-		const { user, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'get', token: this.token, user });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: data.coins, result: data.status };
+	 * Get the amount of coins owned by the user
+	 * @param id The user ID
+	 * @returns The amount of coins owned by the user
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.get('604790617138266149'); // Returns the User
+	 */
+	async get(id: string): Promise<User> {
+		checkType([ { name: 'user', type: 'string', value: id } ]);
+		const res = await endpoint.get(`user/${id}`, this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		const { coins } = res.data;
+		return new User(id, coins);
 	}
+
 	/**
-	 * @param input Must be an object
-	 * @param input.user Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.coins Insert an amount of coins
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async has(input: { user: string, coins: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+	 * Check if the user has the minimum amount of coins
+	 * @param id The user ID
+	 * @param coins The amount of minimum coins
+	 * @returns A boolean, true if the user has the minimum amount of coins
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.has('604790617138266149', 100); // Returns a boolean
+	 */
+	async has(id: string, coins: number): Promise<boolean> {
 		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user', type: 'string', value: input?.user },
-			{ name: 'coins', type: 'number', value: input?.coins },
+			{ name: 'id', type: 'string', value: id },
+			{ name: 'coins', type: 'number', value: coins },
 		]);
-		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'get', token: this.token, user });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: coins <= data.coins, result: data.status };
+		const res = await endpoint.get(`user/${id}`, this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		const { coins: userCoins } = res.data;
+		return coins <= userCoins;
 	}
+
 	/**
-	 * @param input Must be an object
-	 * @param input.user Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.coins Insert an amount of coins
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async set(input: { user: string, coins: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+	 * Set the precise amount of coins owned by a user
+	 * @param id The user ID
+	 * @param coins The amount of coins
+	 * @returns The new user
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.set('604790617138266149', 100); // Sets to 100 coins
+	 */
+	async set(id: string, coins: number): Promise<User> {
 		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user', type: 'string', value: input?.user },
-			{ name: 'coins', type: 'number', value: input?.coins },
+			{ name: 'id', type: 'string', value: id },
+			{ name: 'coins', type: 'number', value: coins },
 		]);
-		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'set', token: this.token, user, coins });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: { user, coins }, result: data.status };
+		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'SET' }, this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		return new User(id, coins);
 	}
+
 	/**
-	 * @param input Must be an object
-	 * @param input.user Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.coins Insert an amount of coins
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async add(input: { user: string, coins: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+	 * Adds a specific amount of coins to a user
+	 * @experimental
+	 * @param id Insert an user id
+	 * @param coins Insert an amount of coins
+	 * @returns The new user
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.add('604790617138266149', 100); // Adds 100 coins
+	 */
+	async add(id: string, coins: number): Promise<User> {
 		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user', type: 'string', value: input?.user },
-			{ name: 'coins', type: 'number', value: input?.coins },
+			{ name: 'id', type: 'string', value: id },
+			{ name: 'coins', type: 'number', value: coins },
 		]);
-		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'add', token: this.token, user, coins });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: { user, coins: data.coins }, result: data.status };
+		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'ADD' }, this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		return new User(id, res.data.coins);
 	}
+
 	/**
-	 * @param input Must be an object
-	 * @param input.user Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.coins Insert an amount of coins
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async remove(input: { user: string, coins: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+	 * Removes a specific amount of coins from a user
+	 * @experimental
+	 * @param id The user ID
+	 * @param coins Insert an amount of coins
+	 * @returns The new user
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.remove('604790617138266149', 100); // Removes 100 coins
+	 */
+	async remove(id: string, coins: number): Promise<User> {
 		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user', type: 'string', value: input?.user },
-			{ name: 'coins', type: 'number', value: input?.coins },
+			{ name: 'id', type: 'string', value: id },
+			{ name: 'coins', type: 'number', value: coins },
 		]);
-		const { user, coins, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'remove', token: this.token, user, coins });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: { user, coins: data.coins }, result: data.status };
+		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'SUB' }, this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		return new User(id, res.data.coins);
 	}
+
 	/**
-	 * @param input Must be an object
-	 * @param input.user1 Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.user2 Insert an user id
-	 * @example '604790617138266149'
-	 * @param input.coins Insert an amount of coins
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async transfer(input: { user1: string, user2: string, coins: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
+	 * Transfers coins from one user to another
+	 * @param firstId Insert an user id
+	 * @param secondId Insert an user id
+	 * @param coins Insert an amount of coins
+	 * @returns The two new users
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.transfer('604790617138266149', '604790617138266149', 100); // Transfers 100 coins from first to second user
+	 */
+	async transfer(firstId: string, secondId: string, coins: number): Promise<User[] | { error: string }> {
 		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'user1', type: 'string', value: input?.user1 },
-			{ name: 'user2', type: 'string', value: input?.user2 },
-			{ name: 'coins', type: 'number', value: input?.coins },
+			{ name: 'firstId', type: 'string', value: firstId },
+			{ name: 'secondId', type: 'string', value: secondId },
+			{ name: 'coins', type: 'number', value: coins },
 		]);
-		const { user1, user2, coins, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'transfer', token: this.token, user1, user2, coins });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: [ { user: user1, coins: data.coins[0] }, { user: user2, coins: data.coins[1] } ], result: data.status };
-	}
-	/**
-	 * @param input Must be an object
-	 * @param input.amount Insert an amount of users to list
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async top(input: { amount: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
-		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'amount', type: 'number', value: input?.amount },
-		]);
-		const { amount, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'top', token: this.token, amount });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: data.users, result: data.status };
-	}
-	/**
-	 * @param input Must be an object
-	 * @param input.amount Insert an amount of users to list
-	 * @param input.bypass Decide to bypass error crashing or not
-	*/
-	async bottom(input: { amount: number, bypass?: boolean }) {
-		if (!this.token) throw new TypeError('SunRodAPI not connected yet, token is missing.');
-		checkType([
-			{ name: 'input', type: 'object', value: input },
-			{ name: 'amount', type: 'number', value: input?.amount },
-		]);
-		const { amount, bypass } = input;
-		const { data } = await axios.post('http://unproxied.sadyn.it:5001/', { type: 'bottom', token: this.token, amount });
-		if (data.status !== 0 && !bypass) throw new TypeError(`Expected status code was 0, but received ${data.status}. This status code is related to "${getStatus(data.status)}".`);
-		else if (data.status !== 0 && bypass) return { result: data.status };
-		else return { data: data.users, result: data.status };
+		const res1 = await endpoint.get(`user/${firstId}`, this.token);
+		if (res1.status !== 200 && !this.bypass) throw checkError(res1.status);
+		if (res1.data.coins < coins) return { error: 'Insufficient coins' };
+		const res2 = await endpoint.post(`user/${firstId}`, { coins, protocol: 'SUB' }, this.token);
+		if (res2.status !== 200 && !this.bypass) throw checkError(res2.status);
+		const res3 = await endpoint.post(`user/${secondId}`, { coins, protocol: 'ADD' }, this.token);
+		if (res3.status !== 200 && !this.bypass) throw checkError(res3.status);
+		return [
+			new User(firstId, res2.data.coins),
+			new User(secondId, res3.data.coins),
+		];
 	}
 }
 
-export = SunRodAPI;
+export default SunRod;
+export { User };
