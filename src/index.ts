@@ -25,7 +25,7 @@ import User from './components/User';
 /**
  * The SunRod Client you need to interact with the API.
  */
-export default class SunRod {
+class SunRod {
 
 	/**
 	 * The SunRod Token
@@ -195,4 +195,7 @@ export default class SunRod {
 		];
 	}
 }
+
+export = SunRod;
+
 export { User };
