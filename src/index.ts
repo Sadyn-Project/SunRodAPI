@@ -196,6 +196,6 @@ class SunRod {
 	}
 }
 
-export = SunRod;
+export default SunRod;
 
 export { User };
