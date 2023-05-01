@@ -66,10 +66,11 @@ class SunRod {
 	 * const client = new SunRod('your-token');
 	 * await client.get('604790617138266149'); // Returns the User
 	 */
-	async get(id: string): Promise<User> {
+	async get(id: string): Promise<User | { error: string }> {
 		checkType([ { name: 'user', type: 'string', value: id } ]);
 		const res = await endpoint.get(`user/${id}`, this.token);
 		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
 		const { coins } = res.data;
 		return new User(id, coins);
 	}
@@ -84,13 +85,14 @@ class SunRod {
 	 * const client = new SunRod('your-token');
 	 * await client.has('604790617138266149', 100); // Returns a boolean
 	 */
-	async has(id: string, coins: number): Promise<boolean> {
+	async has(id: string, coins: number): Promise<boolean | { error: string }> {
 		checkType([
 			{ name: 'id', type: 'string', value: id },
 			{ name: 'coins', type: 'number', value: coins },
 		]);
 		const res = await endpoint.get(`user/${id}`, this.token);
 		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
 		const { coins: userCoins } = res.data;
 		return coins <= userCoins;
 	}
@@ -105,13 +107,14 @@ class SunRod {
 	 * const client = new SunRod('your-token');
 	 * await client.set('604790617138266149', 100); // Sets to 100 coins
 	 */
-	async set(id: string, coins: number): Promise<User> {
+	async set(id: string, coins: number): Promise<User | { error: string }> {
 		checkType([
 			{ name: 'id', type: 'string', value: id },
 			{ name: 'coins', type: 'number', value: coins },
 		]);
 		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'SET' }, this.token);
 		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
 		return new User(id, coins);
 	}
 
@@ -126,13 +129,14 @@ class SunRod {
 	 * const client = new SunRod('your-token');
 	 * await client.add('604790617138266149', 100); // Adds 100 coins
 	 */
-	async add(id: string, coins: number): Promise<User> {
+	async add(id: string, coins: number): Promise<User | { error: string }> {
 		checkType([
 			{ name: 'id', type: 'string', value: id },
 			{ name: 'coins', type: 'number', value: coins },
 		]);
 		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'ADD' }, this.token);
 		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
 		return new User(id, res.data.coins);
 	}
 
@@ -147,13 +151,14 @@ class SunRod {
 	 * const client = new SunRod('your-token');
 	 * await client.remove('604790617138266149', 100); // Removes 100 coins
 	 */
-	async remove(id: string, coins: number): Promise<User> {
+	async remove(id: string, coins: number): Promise<User | { error: string }> {
 		checkType([
 			{ name: 'id', type: 'string', value: id },
 			{ name: 'coins', type: 'number', value: coins },
 		]);
 		const res = await endpoint.post(`user/${id}`, { coins, protocol: 'SUB' }, this.token);
 		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
 		return new User(id, res.data.coins);
 	}
 
@@ -176,11 +181,14 @@ class SunRod {
 		]);
 		const res1 = await endpoint.get(`user/${firstId}`, this.token);
 		if (res1.status !== 200 && !this.bypass) throw checkError(res1.status);
+		if (res1.data.error) return { error: res1.data.error };
 		if (res1.data.coins < coins) return { error: 'Insufficient coins' };
 		const res2 = await endpoint.post(`user/${firstId}`, { coins, protocol: 'SUB' }, this.token);
 		if (res2.status !== 200 && !this.bypass) throw checkError(res2.status);
+		if (res2.data.error) return { error: res2.data.error };
 		const res3 = await endpoint.post(`user/${secondId}`, { coins, protocol: 'ADD' }, this.token);
 		if (res3.status !== 200 && !this.bypass) throw checkError(res3.status);
+		if (res3.data.error) return { error: res3.data.error };
 		return [
 			new User(firstId, res2.data.coins),
 			new User(secondId, res3.data.coins),

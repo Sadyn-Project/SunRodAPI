@@ -98,102 +98,114 @@ console.log(myUser.coins); // 100
 
 ## Methods
 
-- [SunRodAPI#*get*](#sunrodapiget)
-- [SunRodAPI#*has*](#sunrodapihas)
-- [SunRodAPI#*set*](#sunrodapiset)
-- [SunRodAPI#*add*](#sunrodapiadd)
-- [SunRodAPI#*remove*](#sunrodapiremove)
-- [SunRodAPI#*transfer*](#sunrodapitransfer)
+These are the methods inside the SunRod class:  
 
-### SunRodAPI#*get*
+- [SunRod#*get*](#sunrodget)  
+- [SunRod#*has*](#sunrodhas)  
+- [SunRod#*set*](#sunrodset)  
+- [SunRod#*add*](#sunrodadd)  
+- [SunRod#*remove*](#sunrodremove)  
+- [SunRod#*transfer*](#sunrodtransfer)  
+
+Whenever an error should appear, it will be returned as { error: 'your error' } .  
+This makes it easier to prevent your bot from crashing.  
+
+### SunRod#*get*
 
 The `get` method returns the amount of coins the user has.  
 
-> Input:  
-> `user: string`  
+> Parameters:  
+> `id: string`  
 
 ```js
-await SunRodAPI.get(id); // Should return User
+const user = await client.get(id);
+
+console.log(user.coins); // The amount of coins
 ```
 
 All methods return a [User](#user), and inside the `data` property there will be the result you need (in this case the user coins amount).  
 
 > `result` is another property available in the returned object, which gives you the status code of that method. 0 usually means "success", but if the result code is different it means that an error has occurred and a TypeError will appear.  
 
-### SunRodAPI#*has*
+### SunRod#*has*
 
-The `has` method returns a boolean: true if the user amount of coins is higher of the one you give, false if it is lower.  
+The `has` method returns a boolean: if the user has the minimum amount of coins, its true.  
 
-> Input:  
-> `user: string`  
+> Parameters:  
+> `id: string`  
 > `coins: number`  
 
 ```js
-await SunRodAPI.has({ user: 'id', coins: 0 }); // Should return { data: boolean, result: 0 }
+const hasCoins = await client.has(id, coins);
+
+console.log(hasCoins); // true or false
 ```
 
-Inside the `data` property you will find the returned boolean.  
-
-### SunRodAPI#*set*
+### SunRod#*set*
 
 The `set` method sets to the user a specific amount of coins, and returns the user data.  
 
-> Input:  
-> `user: string`  
+> Parameters:  
+> `id: string`  
 > `coins: number`  
 
 ```js
-await SunRodAPI.set({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 }
+const user = await client.set(id, coins); // The user amount of coins gets modified
+
+console.log(user.coins); // The new amount of coins
 ```
 
 Inside the `data` property you can find user data, with how many coins does he have in total and his id.  
 
-### SunRodAPI#*add*
+### SunRod#*add*
 
 The `add` method adds a specific amount of coins to a user and returns user data.  
 
-> Input:  
-> `user: string`  
+> Parameters:  
+> `id: string`  
 > `coins: number`  
 
 ```js
-await SunRodAPI.add({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
+await client.add({ user: 'id', coins: 0 }); // Add the amount of coins to the user
+
+
 ```
 
 Structure is similar to the `set` method, although this sums to the current user balance and adds the given amount.  
 
-### SunRodAPI#*remove*
+### SunRod#*remove*
 
 The `remove` method removes a specific amount of coins to a user and returns user data.  
 
-> Input:  
-> `user: string`  
+> Parameters:  
+> `id: string`  
 > `coins: number`  
 
 ```js
-await SunRodAPI.remove({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
+await client.remove({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
 ```
 
 This method has the same structure as the `set` and the `add` method, but this subtracts coins from the user.  
 
-**ATTENTION:** The user may not have enough coins in some situations, and an error would appear. View [Status Codes](#status-codes) for more information.  
+**ATTENTION:** The user may not have enough coins in some situations, and { error: 'Insufficient coins' } could be returned instead.
 
-### SunRodAPI#*transfer*
+### SunRod#*transfer*
 
-The `transfer` method transfers an amount of coins from a user to another and returns users data.  
+The `transfer` method transfers an amount of coins from a user to another and returns an array of 2 Users.  
 
-> Input:  
-> `user1: string`  
-> `user2: string`  
+> Parameters:  
+> `firstId: string`  
+> `secondId: string`  
 > `coins: number`  
 
 ```js
-await SunRodAPI.transfer({ user1: 'id', user2: 'id', coins: 0 }); // Should return { data: [ { user: string, coins: number }, { user: string, coins: number } ], result: 0 }
+const users = await client.transfer(firstId, secondId, coins); // Transfers coins from first to second user
+
+console.log(users[0].coins); // The first user new amount of coins
+console.log(users[1].coins); // The second user new amount of coins
 ```
 
-Inside the `data` property you can find an array containing bot users data.  
-
-## Status Codes
+## Status Codes  
 
 > Each status code means something, and is given in the object returned from any method, as the `result` variable.  
 
