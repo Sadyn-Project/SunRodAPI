@@ -50,7 +50,7 @@ class SunRod {
 	constructor(token: string, options?: { bypass?: boolean }) {
 		if (!token) throw new TypeError('Token is missing.');
 		this.token = token;
-		if (options.bypass !== undefined) this.bypass = options.bypass;
+		if (options?.bypass !== undefined) this.bypass = options.bypass;
 		endpoint.get('verify', token).then((res) => {
 			if (!res) throw new Error('SunRod is currently unreachable. Check availability on https://status.sadyn.it');
 			if (!res.data.verify) throw new Error('Your SunRod token is invalid.');
