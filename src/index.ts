@@ -30,12 +30,12 @@ class SunRod {
 	/**
 	 * The SunRod Token
 	 */
-	readonly token: string;
+	private token: string;
 
 	/**
 	 * If this is enabled, SunRod will not throw any error
 	 */
-	readonly bypass: boolean;
+	private bypass: boolean;
 
 	/**
 	 * Constructs the SunRod Client.
@@ -196,6 +196,4 @@ class SunRod {
 	}
 }
 
-export default SunRod;
-
-// export { User };
+export = SunRod;
