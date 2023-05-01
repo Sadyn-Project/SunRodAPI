@@ -1,15 +1,8 @@
-[![Logo](https://sunrod.it/playground_assets/sunrod.svg)](https://sunrod.it)
-# SunRod API
+[![Logo](https://sunrod.it/playground_assets/sunrod.svg)](https://sunrod.it)  
 
-**Join our Discord server to receive announcements about new updates, and receive support at anytime you need!**  
+# <div align="center">SunRod v2.0.0</div>  
 
-SunRod is a project started by **Sadyn Development**, and our aim is to create an API available to Discord Bot developers that allows to use a global economy system as you wish.  
-
-This will not be as simple as the other economy systems, because to gain coins users will need to seriously work, and not only running a command.  
-
-In fact we want to replace paid subscriptions or premium features with our economy. *For example users can buy a premium command for a week just with 50 or 80 coins.*  
-
-Prices and features will be your decision, you can choose what to do with this system but you will need to ask for an authorization from us. *This is because we will then discuss together about prices and rewards.*
+Find out about SunRod on our [website](https://sunrod.it/about) or our [Discord server](https://discord.gg/PBrPeuACnU).  
 
 # Installation
 
@@ -73,6 +66,8 @@ client.sunrod = new SunRod(token);
 
 ## Classes
 
+These are multiple classes you should know about.
+
 ### SunRod
 
 ```js
@@ -81,22 +76,21 @@ const SunRod = require('sunrod-api');
 
 This contains complete access to the API. More info on [Methods](#methods).
 
-### User
-
-```js
-const { User } = require('sunrod-api');
-```
+### User  
 
 This class contains all necessary info about a user.
 
 ```js
-const myUser = new User('604790617138266149', 100) // id, coins
+const user = client.get('604790617138266149'); // Returns the User class
 
-console.log(myUser.id); // '604790617138266149'
-console.log(myUser.coins); // 100
+console.log(user.id); // '604790617138266149' (the id of the user)
+console.log(user.coins); // 100 (the amount of coins)
 ```
 
-## Methods
+> You can find it in these methods:  
+> [SunRod#get](#sunrodget), [SunRod#set](#sunrodset), [SunRod#add](#sunrodadd), [SunRod#remove](#sunrodremove), [SunRod#transfer](#sunrodtransfer).  
+
+## Methods  
 
 These are the methods inside the SunRod class:  
 
@@ -110,7 +104,7 @@ These are the methods inside the SunRod class:
 Whenever an error should appear, it will be returned as { error: 'your error' } .  
 This makes it easier to prevent your bot from crashing.  
 
-### SunRod#*get*
+### SunRod#*get*  
 
 The `get` method returns the amount of coins the user has.  
 
@@ -125,9 +119,7 @@ console.log(user.coins); // The amount of coins
 
 All methods return a [User](#user), and inside the `data` property there will be the result you need (in this case the user coins amount).  
 
-> `result` is another property available in the returned object, which gives you the status code of that method. 0 usually means "success", but if the result code is different it means that an error has occurred and a TypeError will appear.  
-
-### SunRod#*has*
+### SunRod#*has*  
 
 The `has` method returns a boolean: if the user has the minimum amount of coins, its true.  
 
@@ -141,7 +133,7 @@ const hasCoins = await client.has(id, coins);
 console.log(hasCoins); // true or false
 ```
 
-### SunRod#*set*
+### SunRod#*set*  
 
 The `set` method sets to the user a specific amount of coins, and returns the user data.  
 
@@ -157,7 +149,7 @@ console.log(user.coins); // The new amount of coins
 
 Inside the `data` property you can find user data, with how many coins does he have in total and his id.  
 
-### SunRod#*add*
+### SunRod#*add*  
 
 The `add` method adds a specific amount of coins to a user and returns user data.  
 
@@ -173,7 +165,7 @@ await client.add({ user: 'id', coins: 0 }); // Add the amount of coins to the us
 
 Structure is similar to the `set` method, although this sums to the current user balance and adds the given amount.  
 
-### SunRod#*remove*
+### SunRod#*remove*  
 
 The `remove` method removes a specific amount of coins to a user and returns user data.  
 
@@ -182,14 +174,14 @@ The `remove` method removes a specific amount of coins to a user and returns use
 > `coins: number`  
 
 ```js
-await client.remove({ user: 'id', coins: 0 }); // Should return { data: { user: string, coins: number }, result: 0 };
+await client.remove({ user: 'id', coins: 0 }); // Remove the amount of coins from the user
 ```
 
 This method has the same structure as the `set` and the `add` method, but this subtracts coins from the user.  
 
 **ATTENTION:** The user may not have enough coins in some situations, and { error: 'Insufficient coins' } could be returned instead.
 
-### SunRod#*transfer*
+### SunRod#*transfer*  
 
 The `transfer` method transfers an amount of coins from a user to another and returns an array of 2 Users.  
 
@@ -205,33 +197,38 @@ console.log(users[0].coins); // The first user new amount of coins
 console.log(users[1].coins); // The second user new amount of coins
 ```
 
-## Status Codes  
+## Errors  
 
-> Each status code means something, and is given in the object returned from any method, as the `result` variable.  
+Sometimes you may get `{ error: 'your error' }` instead of the actual response.  
 
-| Code | Meaning |
-| :-----: | ----- |
-| `0` | The method was successful. |
-| `1` | The token you are trying to use is not valid. |
-| `2` |  An invalid method was given. *This usually returns when somebody changes the API or creates one by his own.* |
-| `3` | An invalid input was given. *It may be a wrong user id, or you passed a string in the coins variable instead of an integer.* |
-| `4` | Given user has not enough coins. *It may appear when you try to remove or transfer coins from a user, but he doesn't have enough.* |
-| `5` | An invalid amount of users was given. *Usually returned by `SunRodAPI#top()`.* |
-| `6` | Given amount of users was higher than fetched users. *Usually returned by `SunRodAPI#top()`.* |
-| `7` | The function you're trying to use is temporarily not available. *Usually because of important bugs to fix.* |
+That doesn't mean that there's anything wrong with your code, but it's possible.  
+
+> **NOTICE:** These are SunRod errors, while actual errors get thrown and you can prevented using the `bypass` parameter.  
+
+| Error | Meaning |
+| :----- | :----- |
+| `Insufficient coins` | This could come out using [SunRod#remove](#sunrodremove) or [SunRod#transfer](#sunrodtransfer), and means that the user you're taking coins from has not enough. |
+
+*It's just one, but in the future they could become more.*  
+
+### Other Errors  
+
+There could also be other errors, that would eventually stop your bot from running without an error handler.  
+
+There's not a list, but
 
 When the returned status code is not 0, your application (usually your bot) would crash ans give a TypeError on your console.  
 To avoid this add `bypass: true` as a property inside the object you insert as the method parameter, and inside the returned object you will find a `result` property which will be the status code that relates to the problem.  
 
-# Security
+# Security  
 
-We grant security and privacy with our API, it does not require any private information like your bot token or personal data.  
+Read about this to learn more about how we protect your data.  
 
-We suggest to never download and use any alternative API to SunRod, as somebody may be trying to hack you or take your personal information. Just install our official APIs to interact with SunRod. *If you find an API you prefer to use, ask us if it is safe so that we will examinate it and check if there can be any problem.*  
+- SunRod does NOT retreive any personal or professional information from your code or hosting device.  
+- SunRod does NOT share the information you share with us, with anyone else. (es. token, activity, etc.)  
+- This is the official SunRod Package, as you find on our [website](https://sunrod.it/packages). Do NOT use 3rd-party packages.  
 
-We use tokens as a login system but also to track your interactions with the API for security reason. The reason of this is that if somebody manages to have access to your token and tries to ruin our database, we can notice it and change or disable your token immediately. *In case something like this happens, we will alert you.*  
-
-# Participate to __SunRod__!
+# Participate to __SunRod__!  
 
 Ask to participate to **SunRod Project** in our Discord Server: [Join us!](https://discord.gg/PBrPeuACnU/)  
 
