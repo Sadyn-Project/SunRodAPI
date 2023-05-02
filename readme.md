@@ -90,10 +90,25 @@ console.log(user.coins); // 100 (the amount of coins)
 > You can find it in these methods:  
 > [SunRod#get](#sunrodget), [SunRod#set](#sunrodset), [SunRod#add](#sunrodadd), [SunRod#remove](#sunrodremove), [SunRod#transfer](#sunrodtransfer).  
 
+### Admin
+
+```js
+const admin = client.profile(); // Returns the Admin class
+
+console.log(admin.id); // Your admin id
+console.log(admin.name); // Your name as an admin
+console.log(admin.token); // Your token
+console.log(admin.permissions); // Your permission level
+```
+
+> You can find it in these methods:  
+> [SunRod#profile](#sunrodprofile).  
+
 ## Methods  
 
 These are the methods inside the SunRod class:  
 
+- [SunRod#*profile*](#sunrodprofile)
 - [SunRod#*get*](#sunrodget)  
 - [SunRod#*has*](#sunrodhas)  
 - [SunRod#*set*](#sunrodset)  
@@ -104,6 +119,20 @@ These are the methods inside the SunRod class:
 Whenever an error should appear, it will be returned as { error: 'your error' } .  
 This makes it easier to prevent your bot from crashing.  
 
+### SunRod#*profile*
+
+The `profile` method returns your Admin Profile.  
+
+> No Parameters required.  
+
+```js
+const profile = await client.profile(); // The Admin class is returned
+
+console.log(profile.permissions) // Your permission level
+```
+
+This method returns an [Admin](#admin).  
+
 ### SunRod#*get*  
 
 The `get` method returns the amount of coins the user has.  
@@ -112,12 +141,12 @@ The `get` method returns the amount of coins the user has.
 > `id: string`  
 
 ```js
-const user = await client.get(id);
+const user = await client.get(id); // The User class is returned
 
 console.log(user.coins); // The amount of coins
 ```
 
-All methods return a [User](#user), and inside the `data` property there will be the result you need (in this case the user coins amount).  
+Most methods return a [User](#user).  
 
 ### SunRod#*has*  
 

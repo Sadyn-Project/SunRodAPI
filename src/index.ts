@@ -21,6 +21,7 @@ import checkType from './checkType';
 import checkError from './checkError';
 
 import User from './components/User';
+import Admin from './components/Admin';
 
 /**
  * The SunRod Client you need to interact with the API.
@@ -56,11 +57,26 @@ class SunRod {
 			if (!res.data.verify) throw new Error('Your SunRod token is invalid.');
 		});
 	}
+
+	/**
+	 * Get your Admin Profile
+	 * @returns The Admin Profile
+	 * @example
+	 * const SunRod = require('sunrod-api');
+	 * const client = new SunRod('your-token');
+	 * await client.profile(); // Returns the Admin Profile
+	 */
+	async profile(): Promise<Admin | { error: string }> {
+		const res = await endpoint.get('', this.token);
+		if (res.status !== 200 && !this.bypass) throw checkError(res.status);
+		if (res.data.error) return { error: res.data.error };
+		return new Admin(res.data.id, res.data.name, res.data.token, res.data.permissions);
+	}
 	
 	/**
 	 * Get the amount of coins owned by the user
 	 * @param id The user ID
-	 * @returns The amount of coins owned by the user
+	 * @returns The constructed User
 	 * @example
 	 * const SunRod = require('sunrod-api');
 	 * const client = new SunRod('your-token');
@@ -101,7 +117,7 @@ class SunRod {
 	 * Set the precise amount of coins owned by a user
 	 * @param id The user ID
 	 * @param coins The amount of coins
-	 * @returns The new user
+	 * @returns The constructed User
 	 * @example
 	 * const SunRod = require('sunrod-api');
 	 * const client = new SunRod('your-token');
@@ -123,7 +139,7 @@ class SunRod {
 	 * @experimental
 	 * @param id Insert an user id
 	 * @param coins Insert an amount of coins
-	 * @returns The new user
+	 * @returns The constructed User
 	 * @example
 	 * const SunRod = require('sunrod-api');
 	 * const client = new SunRod('your-token');
@@ -145,7 +161,7 @@ class SunRod {
 	 * @experimental
 	 * @param id The user ID
 	 * @param coins Insert an amount of coins
-	 * @returns The new user
+	 * @returns The constructed User
 	 * @example
 	 * const SunRod = require('sunrod-api');
 	 * const client = new SunRod('your-token');
@@ -167,7 +183,7 @@ class SunRod {
 	 * @param firstId Insert an user id
 	 * @param secondId Insert an user id
 	 * @param coins Insert an amount of coins
-	 * @returns The two new users
+	 * @returns The two constructed Users in an array
 	 * @example
 	 * const SunRod = require('sunrod-api');
 	 * const client = new SunRod('your-token');
