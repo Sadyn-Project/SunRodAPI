@@ -6,7 +6,7 @@
   "main": "build/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sadyn-Project/SunRodAPI.git"
+    "url": "git+https://source.thundernetwork.org/Sadyn-Project/SunRodAPI.git"
   },
   "scripts": {
     "install": "npm run build",
@@ -23,9 +23,9 @@
   "author": "Sadyn Project",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Sadyn-Project/SunRodAPI/issues"
+    "url": "https://source.thundernetwork.org/Sadyn-Project/SunRodAPI/issues"
   },
-  "homepage": "https://github.com/Sadyn-Project/SunRodAPI#readme",
+  "homepage": "https://source.thundernetwork.org/Sadyn-Project/SunRodAPI#readme",
   "dependencies": {
     "axios": "^0.27.2",
     "typescript": "^4.7.4"
